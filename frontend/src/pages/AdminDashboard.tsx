@@ -133,6 +133,10 @@ const AdminDashboard: React.FC = () => {
         {activeTab === 'erp' && userRole === 'admin' && (
           <ErpSyncPanel onSyncComplete={handleSyncComplete} />
         )}
+
+        {activeTab === 'users' && userRole === 'admin' && (
+          <UserManagementPanel stores={stores} />
+        )}
       </main>
 
       {isModalOpen && selectedPet && (

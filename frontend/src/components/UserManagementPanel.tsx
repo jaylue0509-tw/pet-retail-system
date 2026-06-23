@@ -3,7 +3,7 @@ import api from '../api';
 import type { Store } from '../hooks/useStores';
 
 interface User {
-  id: int;
+  id: number;
   username: string;
   full_name?: string;
   role: string;

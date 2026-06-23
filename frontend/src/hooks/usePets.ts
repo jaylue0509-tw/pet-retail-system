@@ -23,6 +23,8 @@ export interface Pet {
   days_in_store: number;
   current_age_months: number;
   store_id: number;
+  updated_at: string;
+  updated_by?: string;
 }
 
 export const usePets = (initialParams: any = {}) => {
