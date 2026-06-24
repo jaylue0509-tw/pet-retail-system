@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import type { Store } from '../hooks/useStores';
-import { API_BASE_URL } from '../api';
+import { getImageUrl } from '../api';
 
 interface StoreCardProps {
   store: Store;
@@ -22,8 +22,8 @@ const StoreCard: React.FC<StoreCardProps> = ({ store }) => {
   const displayTotalCount = validDogsCount + validCatsCount;
 
   const firstPetWithPhoto = activePets.find(p => p.cover_photo);
-  const bgImage = firstPetWithPhoto 
-    ? `${API_BASE_URL}${firstPetWithPhoto.cover_photo}` 
+  const imageUrl = firstPetWithPhoto 
+    ? getImageUrl(firstPetWithPhoto.cover_photo) 
     : '/pet_placeholder.png';
 
   return (
@@ -31,7 +31,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store }) => {
       <div style={{ 
         height: '180px', 
         width: '100%', 
-        backgroundImage: `url(${bgImage})`,
+        backgroundImage: `url(${imageUrl})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         position: 'relative'

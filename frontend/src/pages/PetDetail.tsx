@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import api, { API_BASE_URL } from '../api';
+import api, { getImageUrl } from '../api';
 
 interface Pet {
   id: number;
@@ -158,7 +158,7 @@ const PetDetail: React.FC = () => {
             borderRadius: '16px',
             overflow: 'hidden',
             background: 'var(--warm-white)',
-            backgroundImage: allPhotos.length > 0 ? `url(${API_BASE_URL}${allPhotos[activePhotoIdx]})` : `url(/pet_placeholder.png)`,
+            backgroundImage: allPhotos.length > 0 ? `url(${getImageUrl(allPhotos[activePhotoIdx])})` : `url(/pet_placeholder.png)`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             display: 'flex',
@@ -199,7 +199,7 @@ const PetDetail: React.FC = () => {
                     width: '70px',
                     height: '70px',
                     borderRadius: '8px',
-                    backgroundImage: `url(${API_BASE_URL}${photo})`,
+                    backgroundImage: `url(${getImageUrl(photo)})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     cursor: 'pointer',

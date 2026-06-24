@@ -1,7 +1,13 @@
 import axios from 'axios';
 
 // NOTE：FastAPI 後端 API 基礎路徑
-export const API_BASE_URL = 'http://127.0.0.1:8000';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://127.0.0.1:8000');
+
+export const getImageUrl = (url: string | undefined | null) => {
+  if (!url) return '';
+  if (url.startsWith('http')) return url;
+  return `${API_BASE_URL}${url}`;
+};
 
 const api = axios.create({
   baseURL: `${API_BASE_URL}/api`,

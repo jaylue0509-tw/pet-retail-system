@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
-import api, { API_BASE_URL } from '../api';
+import api, { getImageUrl } from '../api';
 import { useStores } from '../hooks/useStores';
 
 interface Pet {
@@ -245,8 +245,8 @@ const PetList: React.FC = () => {
         <div className="grid">
           {pets.map(pet => {
             const photoSrc = pet.cover_photo 
-              ? `${API_BASE_URL}${pet.cover_photo}` 
-              : null;
+              ? getImageUrl(pet.cover_photo)
+              : '/pet_placeholder.png';
 
             // 在店天數久置警告樣式
             let daysWarningColor = 'var(--ink-mid)';

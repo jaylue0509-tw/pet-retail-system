@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import api, { API_BASE_URL } from '../api';
+import api, { getImageUrl } from '../api';
 import type { Pet } from '../hooks/usePets';
 
 interface PetStatusLog {
@@ -173,7 +173,7 @@ const PetEditModal: React.FC<PetEditModalProps> = ({ pet, username, onClose, onS
                   width: '120px',
                   height: '90px',
                   borderRadius: '8px',
-                  backgroundImage: coverPhoto ? `url(${API_BASE_URL}${coverPhoto})` : `url(/pet_placeholder.png)`,
+                  backgroundImage: coverPhoto ? `url(${getImageUrl(coverPhoto)})` : `url(/pet_placeholder.png)`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',
@@ -200,7 +200,7 @@ const PetEditModal: React.FC<PetEditModalProps> = ({ pet, username, onClose, onS
                     style={{ 
                       width: '70px', 
                       height: '70px', 
-                      backgroundImage: `url(${API_BASE_URL}${photo})`,
+                      backgroundImage: `url(${getImageUrl(photo)})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center',
                       borderRadius: '6px',
