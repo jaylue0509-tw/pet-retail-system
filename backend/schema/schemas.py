@@ -38,14 +38,43 @@ class PetUpdate(BaseModel):
 class Pet(PetBase):
     id: int
     store_id: int
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     published_at: Optional[datetime] = None
     created_by: Optional[str] = None
     updated_by: Optional[str] = None
 
     class Config:
         from_attributes = True
+
+    @computed_field
+    @property
+    def current_age_months(self) -> int:
+        """
+        計算該活體目前的月齡
+        """
+        try:
+            birth = datetime.strptime(self.birth_date, "%Y-%m-%d")
+            now = datetime.now()
+            months = (now.year - birth.year) * 12 + now.month - birth.month
+            return max(0, months)
+        except Exception:
+            return 0
+
+    @computed_field
+    @property
+    def days_in_store(self) -> int:
+        """
+        計算進貨至今的在庫天數
+        """
+        try:
+            entry = datetime.strptime(self.entry_date, "%Y-%m-%d")
+            now = datetime.now()
+            delta = now - entry
+            return max(0, delta.days)
+        except Exception:
+            return 0
+
 
 class PetStatusLogBase(BaseModel):
     pet_code: str
@@ -66,33 +95,6 @@ class PetStatusLog(PetStatusLogBase):
     class Config:
         from_attributes = True
 
-    @computed_field
-    @property
-    def current_age_months(self) -> int:
-        """
-        計算出生日期到當前日期的即時月齡
-        """
-        try:
-            birth = datetime.strptime(self.birth_date, "%Y-%m-%d")
-            now = datetime.now()
-            months = (now.year - birth.year) * 12 + now.month - birth.month
-            return max(0, months)
-        except Exception:
-            return 0
-
-    @computed_field
-    @property
-    def days_in_store(self) -> int:
-        """
-        計算進貨日期到目前的在庫天數
-        """
-        try:
-            entry = datetime.strptime(self.entry_date, "%Y-%m-%d")
-            now = datetime.now()
-            delta = now - entry
-            return max(0, delta.days)
-        except Exception:
-            return 0
 
 class StoreBase(BaseModel):
     name: str

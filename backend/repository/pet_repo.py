@@ -58,10 +58,10 @@ def get_pet_status_logs(db: Session, pet_code: str) -> List[models.PetStatusLog]
 
 # --- Dashboard Queries ---
 def count_active_stores(db: Session) -> int:
-    return db.query(models.Pet.store_id).filter(
+    return db.query(func.count(func.distinct(models.Pet.store_id))).filter(
         models.Pet.publish_status == "上架中",
         models.Pet.status == "在庫"
-    ).distinct().count()
+    ).scalar() or 0
 
 def count_published_pets(db: Session) -> int:
     return db.query(models.Pet).filter(
@@ -95,8 +95,10 @@ def count_stale_pets(db: Session, until: datetime) -> int:
         models.Pet.updated_at <= until
     ).count()
 
+from sqlalchemy.orm import joinedload
+
 def get_active_pets_with_store(db: Session) -> List[models.Pet]:
-    return db.query(models.Pet).join(models.Store).filter(
+    return db.query(models.Pet).options(joinedload(models.Pet.store)).filter(
         models.Pet.publish_status == "上架中",
         models.Pet.status == "在庫"
     ).all()
