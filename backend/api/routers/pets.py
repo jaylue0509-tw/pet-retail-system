@@ -26,7 +26,7 @@ def get_pets(
     store_id: Optional[int] = None,
     color: Optional[str] = None,
     status_filter: Optional[str] = "在庫",
-    publish_status_filter: Optional[str] = "前台展示",
+    publish_status_filter: Optional[str] = "上架中",
     min_age_months: Optional[int] = None,
     max_age_months: Optional[int] = None,
     min_days: Optional[int] = None,
