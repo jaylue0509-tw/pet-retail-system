@@ -105,28 +105,7 @@ const PetDetail: React.FC = () => {
     }
   };
 
-  // 在店天數警示判斷
-  let staleStatusText = '新進活體';
-  let staleColor = '#2b6cb0';
-  let staleBg = '#ebf8ff';
-  
-  if (pet.days_in_store >= 120) {
-    staleStatusText = '滯店警示 (120天以上高齡)';
-    staleColor = '#c53030';
-    staleBg = '#fff5f5';
-  } else if (pet.days_in_store >= 90) {
-    staleStatusText = '滯店警示 (90天以上特寵關注)';
-    staleColor = '#dd6b20';
-    staleBg = '#fffaf0';
-  } else if (pet.days_in_store >= 60) {
-    staleStatusText = '滯店警示 (60天以上區主管檢視)';
-    staleColor = '#b7791f';
-    staleBg = '#fefcbf';
-  } else if (pet.days_in_store >= 30) {
-    staleStatusText = '在店觀察 (30天以上)';
-    staleColor = '#4a5568';
-    staleBg = '#edf2f7';
-  }
+
 
   return (
     <div style={{ maxWidth: '900px', margin: '0 auto' }}>
