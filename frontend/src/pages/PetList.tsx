@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import api, { getImageUrl } from '../api';
-import { useStores } from '../hooks/useStores';
 
 interface Pet {
   id: number;
@@ -31,7 +30,6 @@ const PetList: React.FC = () => {
   const searchParams = new URLSearchParams(location.search);
   
   // 獲取門市資料以轉換門市名稱
-  const { stores } = useStores();
   
   // URL 帶入的初階篩選
   const urlCategory = searchParams.get('category');
@@ -40,6 +38,7 @@ const PetList: React.FC = () => {
   const [pets, setPets] = useState<Pet[]>([]);
   const [loading, setLoading] = useState(true);
   const [storeName, setStoreName] = useState<string>('');
+  const [storeMap, setStoreMap] = useState<Record<number, string>>({});
 
   // 進階篩選與排序 State
   const [category, setCategory] = useState<string>(urlCategory || 'all');
@@ -47,7 +46,6 @@ const PetList: React.FC = () => {
   const [gender, setGender] = useState<string>('all');
   const [color, setColor] = useState<string>('');
   const [ageRange, setAgeRange] = useState<string>('all'); // 'all', 'baby', 'young', 'adult', 'senior'
-  const [daysRange, setDaysRange] = useState<string>('all'); // 'all', 'under30', '30to60', '60to90', 'over90'
   const [sortBy, setSortBy] = useState<string>('updated_desc'); // 'days_asc', 'days_desc', 'price_asc', 'price_desc', 'updated_desc'
 
   useEffect(() => {
@@ -56,14 +54,22 @@ const PetList: React.FC = () => {
   }, [urlCategory]);
 
   useEffect(() => {
+    api.get('/stores?size=500').then(res => {
+      if (res.data && res.data.items) {
+        const map: Record<number, string> = {};
+        res.data.items.forEach((s: any) => { map[s.id] = s.name; });
+        setStoreMap(map);
+      }
+    }).catch(err => console.error('無法載入全台門市名稱對應表', err));
+  }, []);
+
+  useEffect(() => {
     const fetchPets = async () => {
       setLoading(true);
       try {
         // 解析年齡與在店天數篩選範圍，傳遞給後端 API
         let min_age_months: number | undefined;
         let max_age_months: number | undefined;
-        let min_days: number | undefined;
-        let max_days: number | undefined;
 
         if (ageRange === 'baby') {
           max_age_months = 3;
@@ -77,18 +83,6 @@ const PetList: React.FC = () => {
           min_age_months = 36;
         }
 
-        if (daysRange === 'under30') {
-          max_days = 30;
-        } else if (daysRange === '30to60') {
-          min_days = 30;
-          max_days = 60;
-        } else if (daysRange === '60to90') {
-          min_days = 60;
-          max_days = 90;
-        } else if (daysRange === 'over90') {
-          min_days = 90;
-        }
-
         // 調用 FastAPI 接口
         const params: any = {
           category: category !== 'all' ? category : undefined,
@@ -98,8 +92,6 @@ const PetList: React.FC = () => {
           store_id: urlStoreId ? parseInt(urlStoreId, 10) : undefined,
           min_age_months,
           max_age_months,
-          min_days,
-          max_days,
           sort_by: sortBy,
           publish_status_filter: '上架中',
           status_filter: '在庫'
@@ -142,7 +134,7 @@ const PetList: React.FC = () => {
     };
 
     fetchPets();
-  }, [category, breed, gender, color, ageRange, daysRange, sortBy, urlStoreId, urlCategory]);
+  }, [category, breed, gender, color, ageRange, sortBy, urlStoreId, urlCategory]);
 
   let title = '全台在庫活體查詢';
   if (category === '犬') title = '犬隻查詢';
@@ -211,25 +203,11 @@ const PetList: React.FC = () => {
             </select>
           </div>
 
-          {/* 在店天數篩選 */}
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="form-label" style={{ fontSize: '0.8rem' }}>在店天數</label>
-            <select className="form-input" style={{ background: '#f8fafc' }} value={daysRange} onChange={e => setDaysRange(e.target.value)}>
-              <option value="all">不限</option>
-              <option value="under30">30天以下</option>
-              <option value="30to60">30~60天</option>
-              <option value="60to90">60~90天</option>
-              <option value="over90">90天以上</option>
-            </select>
-          </div>
-
           {/* 排序方式 */}
           <div className="form-group" style={{ marginBottom: 0 }}>
             <label className="form-label" style={{ fontSize: '0.8rem' }}>排序方式</label>
             <select className="form-input" style={{ background: '#f8fafc' }} value={sortBy} onChange={e => setSortBy(e.target.value)}>
               <option value="updated_desc">最新更新</option>
-              <option value="days_asc">在店天數少到多</option>
-              <option value="days_desc">在店天數多到少 (滯店警示)</option>
               <option value="price_asc">建議售價低到高</option>
               <option value="price_desc">建議售價高到低</option>
             </select>
@@ -249,20 +227,6 @@ const PetList: React.FC = () => {
             const photoSrc = pet.cover_photo 
               ? getImageUrl(pet.cover_photo)
               : '/pet_placeholder.png';
-
-            // 在店天數久置警告樣式
-            let daysWarningColor = 'var(--ink-mid)';
-            let daysBadgeBg = '#f3f4f6';
-            if (pet.days_in_store >= 120) {
-              daysWarningColor = '#e53e3e'; // 120天以上高齡活體
-              daysBadgeBg = '#fff5f5';
-            } else if (pet.days_in_store >= 90) {
-              daysWarningColor = '#dd6b20'; // 90天以上特寵關注
-              daysBadgeBg = '#fffaf0';
-            } else if (pet.days_in_store >= 60) {
-              daysWarningColor = '#b7791f'; // 60天以上區主管檢視
-              daysBadgeBg = '#fefcbf';
-            }
 
             return (
               <div 
@@ -287,19 +251,6 @@ const PetList: React.FC = () => {
                   {/* 品種小徽章 */}
                   <span style={{ background: 'rgba(0,0,0,0.6)', color: '#fff', padding: '4px 8px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: 600 }}>
                     {pet.category}
-                  </span>
-                  
-                  {/* 在店天數浮動標籤 */}
-                  <span style={{ 
-                    background: daysBadgeBg, 
-                    color: daysWarningColor, 
-                    padding: '4px 10px', 
-                    borderRadius: '20px', 
-                    fontSize: '0.75rem', 
-                    fontWeight: 700,
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
-                  }}>
-                    在店 {pet.days_in_store} 天
                   </span>
 
                   {!photoSrc && (
@@ -331,7 +282,7 @@ const PetList: React.FC = () => {
                   <div style={{ color: 'var(--ink-mid)', fontSize: '0.9rem', marginBottom: '1rem', flexGrow: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
                       <span>📍</span>
-                      <strong>{stores.find(s => s.id === pet.store_id)?.name || '尋找門市中...'}</strong>
+                      <strong>{storeMap[pet.store_id] || '讀取門市中...'}</strong>
                     </div>
                   </div>
 

@@ -182,9 +182,6 @@ const PetDetail: React.FC = () => {
               }}>
                 {pet.publish_status}
               </span>
-              <span style={{ background: staleBg, color: staleColor, padding: '4px 12px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 700 }}>
-                {staleStatusText}
-              </span>
             </div>
           </div>
 
@@ -248,10 +245,6 @@ const PetDetail: React.FC = () => {
             <div>
               <span style={{ fontSize: '0.8rem', color: 'var(--ink-light)', display: 'block' }}>即時月齡</span>
               <strong style={{ fontSize: '1.1rem', color: 'var(--ink)' }}>{pet.current_age_months} 個月大</strong>
-            </div>
-            <div>
-              <span style={{ fontSize: '0.8rem', color: 'var(--ink-light)', display: 'block' }}>在庫天數</span>
-              <strong style={{ fontSize: '1.1rem', color: staleColor }}>{pet.days_in_store} 天</strong>
             </div>
             <div>
               <span style={{ fontSize: '0.8rem', color: 'var(--ink-light)', display: 'block' }}>出生日期</span>

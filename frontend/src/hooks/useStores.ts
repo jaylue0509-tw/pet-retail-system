@@ -19,8 +19,8 @@ export interface Store {
   business_hours: string;
   grooming_hours: string | null;
   license_number?: string | null;
-  can_trade_dog: boolean;
-  can_trade_cat: boolean;
+  can_trade_dog: boolean | null;
+  can_trade_cat: boolean | null;
   pets: PetBrief[];
 }
 
@@ -45,8 +45,8 @@ export const useStores = () => {
             phone: s.phone || '暫無電話',
             business_hours: s.business_hours || '11:00 - 22:00',
             grooming_hours: s.grooming_hours || '無美容服務',
-            can_trade_dog: !!s.can_trade_dog,
-            can_trade_cat: !!s.can_trade_cat,
+            can_trade_dog: s.can_trade_dog !== undefined ? s.can_trade_dog : null,
+            can_trade_cat: s.can_trade_cat !== undefined ? s.can_trade_cat : null,
             pets: activePets.map((p: any) => ({
               id: p.id,
               name: p.name,
