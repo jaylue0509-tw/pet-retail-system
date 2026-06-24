@@ -1,0 +1,11 @@
+﻿有許可證門市數: 80
+活體狀態分布:
+  在庫: 530
+上架狀態分布:
+  上架中: 530
+
+有許可＆有交易資格的門市:
+{'id': 7, 'name': '土城中華店', 'address': '新北市土城區中華路1段235號1樓', 'license_number': '特寵業字第A1140020號', 'can_trade_dog': 1, 'can_trade_cat': 1}
+{'id': 8, 'name': '板橋雨農店', 'address': '新北市板橋區雨農路54號1樓', 'license_number': '特寵業字第A1140016號', 'can_trade_dog': 0, 'can_trade_cat': 1}
+{'id': 9, 'name': '桃園巨蛋店', 'address': '桃園市龜山區萬壽路二段1379號', 'license_number': '特寵業字第C1140455號', 'can_trade_dog': 1, 'can_trade_cat': 1}
+完成！
