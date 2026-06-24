@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 // NOTE：FastAPI 後端 API 基礎路徑
-export const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://127.0.0.1:8000');
+// 本地開發：VITE_API_URL 未設定時使用空字串，前端呼叫 /api/* 由 vite proxy 轉發
+// Vercel 生產：相對路徑 /api/* 由 Vercel routePrefix 路由到後端
+export const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 export const getImageUrl = (url: string | undefined | null) => {
   if (!url) return '';

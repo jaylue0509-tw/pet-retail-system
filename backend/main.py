@@ -39,8 +39,10 @@ if not os.path.exists(static_dir):
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 # 註冊 Routers
-app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
-app.include_router(stores.router, prefix="/api/stores", tags=["stores"])
-app.include_router(pets.router, prefix="/api/pets", tags=["pets"])
-app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
-app.include_router(users.router, prefix="/api/users", tags=["users"])
+# NOTE：Vercel experimentalServices routePrefix=/api 會將 /api 前綴剈除後再傳給 FastAPI
+# 所以此處 Router prefix 不需要包含 /api
+app.include_router(auth.router, prefix="/auth", tags=["auth"])
+app.include_router(stores.router, prefix="/stores", tags=["stores"])
+app.include_router(pets.router, prefix="/pets", tags=["pets"])
+app.include_router(dashboard.router, prefix="/dashboard", tags=["dashboard"])
+app.include_router(users.router, prefix="/users", tags=["users"])
