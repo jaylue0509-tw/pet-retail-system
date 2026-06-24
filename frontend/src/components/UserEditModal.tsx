@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import type { Store } from '../hooks/useStores';
 import api from '../api';
 
@@ -69,9 +70,9 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ user, stores, onClose, on
     }
   };
 
-  return (
+  return ReactDOM.createPortal(
     <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-      <div className="card" style={{ width: '90%', maxWidth: '500px', padding: '2rem', maxHeight: '90vh', overflowY: 'auto' }}>
+      <div className="card" style={{ width: '90%', maxWidth: '650px', padding: '2rem', maxHeight: '90vh', overflowY: 'auto' }}>
         <h3 style={{ marginTop: 0, marginBottom: '1.5rem', color: 'var(--ink)' }}>{user ? '編輯帳號' : '新增帳號'}</h3>
         
         {!user && (
@@ -116,7 +117,8 @@ const UserEditModal: React.FC<UserEditModalProps> = ({ user, stores, onClose, on
           <button className="btn btn-primary" onClick={handleSave}>儲存</button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 
