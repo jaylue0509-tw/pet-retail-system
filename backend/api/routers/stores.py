@@ -7,7 +7,7 @@ from repository import store_repo
 
 router = APIRouter()
 
-@router.get("/", response_model=schemas.PaginatedStores)
+@router.get("", response_model=schemas.PaginatedStores)
 def get_stores(page: int = 1, size: int = 12, db: Session = Depends(get_db)):
     total, stores = store_repo.get_stores(db, page=page, size=size)
     total_pages = (total + size - 1) // size if size > 0 else 0
@@ -22,5 +22,5 @@ def get_stores(page: int = 1, size: int = 12, db: Session = Depends(get_db)):
 def get_store(store_id: int, db: Session = Depends(get_db)):
     store = store_repo.get_store(db, store_id)
     if store is None:
-        raise HTTPException(status_code=404, detail="æ‰¾ä¸åˆ°è©²é–€å¸‚")
+        raise HTTPException(status_code=404, detail="?¾ä??°è©²?€å¸?)
     return store

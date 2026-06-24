@@ -12,7 +12,7 @@ def login(user: schemas.UserLogin, db: Session = Depends(get_db)):
     if not db_user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="帳號或密碼錯誤",
+            detail="帳�??��?碼錯�?,
         )
     access_token = auth_service.create_access_token(
         data={"sub": db_user.username, "role": db_user.role, "store_id": db_user.store_id, "full_name": db_user.full_name}
