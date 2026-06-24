@@ -16,9 +16,12 @@ const StoreCard: React.FC<StoreCardProps> = ({ store }) => {
   const dogsCount = activePets.filter(p => p.category === '犬').length;
   const catsCount = activePets.filter(p => p.category === '貓').length;
   
-  // 只計算有許可的活體，避免因為假資料或錯誤輸入導致數字不吻合
-  const validDogsCount = store.can_trade_dog ? dogsCount : 0;
-  const validCatsCount = store.can_trade_cat ? catsCount : 0;
+  const canTradeDog = store.can_trade_dog !== false;
+  const canTradeCat = store.can_trade_cat !== false;
+
+  // 只計算有許可的活體，若未特別註明無許可（null），則預設允許顯示，避免因為假資料或尚未建檔導致數字不吻合
+  const validDogsCount = canTradeDog ? dogsCount : 0;
+  const validCatsCount = canTradeCat ? catsCount : 0;
   const displayTotalCount = validDogsCount + validCatsCount;
 
   const firstPetWithPhoto = activePets.find(p => p.cover_photo);
@@ -54,8 +57,8 @@ const StoreCard: React.FC<StoreCardProps> = ({ store }) => {
         <div style={{ display: 'flex', gap: '0.4rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
           <span style={{ background: '#edf2f7', color: '#4a5568', padding: '0.2rem 0.5rem', fontSize: '0.75rem', borderRadius: '4px', fontWeight: 600 }}>用品銷售</span>
           {store.grooming_hours && store.grooming_hours !== '無美容服務' && <span style={{ background: '#edf2f7', color: '#4a5568', padding: '0.2rem 0.5rem', fontSize: '0.75rem', borderRadius: '4px', fontWeight: 600 }}>寵物美容</span>}
-          {store.can_trade_dog && <span style={{ background: '#ebf8ff', color: '#2b6cb0', padding: '0.2rem 0.5rem', fontSize: '0.75rem', borderRadius: '4px', fontWeight: 600 }}>🐶 許可犬隻買賣</span>}
-          {store.can_trade_cat && <span style={{ background: '#fffaf0', color: '#dd6b20', padding: '0.2rem 0.5rem', fontSize: '0.75rem', borderRadius: '4px', fontWeight: 600 }}>🐱 許可貓咪買賣</span>}
+          {canTradeDog && <span style={{ background: '#ebf8ff', color: '#2b6cb0', padding: '0.2rem 0.5rem', fontSize: '0.75rem', borderRadius: '4px', fontWeight: 600 }}>🐶 許可犬隻買賣</span>}
+          {canTradeCat && <span style={{ background: '#fffaf0', color: '#dd6b20', padding: '0.2rem 0.5rem', fontSize: '0.75rem', borderRadius: '4px', fontWeight: 600 }}>🐱 許可貓咪買賣</span>}
         </div>
 
         <div style={{ color: 'var(--ink-mid)', fontSize: '0.9rem', lineHeight: '1.6', marginBottom: '1.5rem', flexGrow: 1 }}>
@@ -77,7 +80,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store }) => {
         </div>
         
         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid #edf2f7' }}>
-          {store.can_trade_dog ? (
+          {canTradeDog ? (
             validDogsCount > 0 ? (
               <Link to={`/pets?category=犬&store_id=${store.id}`} className="badge" style={{ background: '#ebf8ff', color: '#2b6cb0', margin: 0, textDecoration: 'none', border: '1px solid #bee3f8', flex: 1, textAlign: 'center', padding: '0.4rem', fontWeight: 600 }}>
                 🐶 犬隻查詢 ({validDogsCount})
@@ -89,7 +92,7 @@ const StoreCard: React.FC<StoreCardProps> = ({ store }) => {
             <span className="badge" style={{ background: '#f7fafc', color: '#a0aec0', margin: 0, border: '1px solid #e2e8f0', flex: 1, textAlign: 'center', padding: '0.4rem', fontSize: '0.8rem', opacity: 0.6 }}>無犬隻買賣許可</span>
           )}
 
-          {store.can_trade_cat ? (
+          {canTradeCat ? (
             validCatsCount > 0 ? (
               <Link to={`/pets?category=貓&store_id=${store.id}`} className="badge" style={{ background: '#fffaf0', color: '#dd6b20', margin: 0, textDecoration: 'none', border: '1px solid #feebc8', flex: 1, textAlign: 'center', padding: '0.4rem', fontWeight: 600 }}>
                 🐱 貓咪查詢 ({validCatsCount})
