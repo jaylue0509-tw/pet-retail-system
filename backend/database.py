@@ -6,8 +6,8 @@ from dotenv import load_dotenv
 # 載入 .env 環境變數
 load_dotenv()
 
-# 取得 DATABASE_URL，如果未設定則預設 fallback 到原本的 SQLite (開發時容錯)
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./petsystem.db")
+# 取得 DATABASE_URL，如果未設定則優先找 Vercel 提供的 POSTGRES_URL，再 fallback 到 SQLite
+SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL") or os.getenv("POSTGRES_URL", "sqlite:///./petsystem.db")
 
 # 判斷是否為 SQLite 以決定是否需要 check_same_thread
 connect_args = {}
