@@ -46,3 +46,14 @@ app.include_router(stores.router, prefix="/stores", tags=["stores"])
 app.include_router(pets.router, prefix="/pets", tags=["pets"])
 app.include_router(dashboard.router, prefix="/dashboard", tags=["dashboard"])
 app.include_router(users.router, prefix="/users", tags=["users"])
+
+from fastapi.responses import JSONResponse
+from fastapi import Request
+import traceback
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=500,
+        content={"message": "Internal Server Error", "details": traceback.format_exc()}
+    )
