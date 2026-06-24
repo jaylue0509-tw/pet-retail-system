@@ -42,8 +42,6 @@ const StoreList: React.FC = () => {
   };
 
   const filteredStores = stores.filter(store => {
-    if (!store.license_number) return false;
-
     const match = store.address ? store.address.match(/^(?:台灣省|台灣)?(.*?[縣市])/) : null;
     const city = match ? match[1].replace('臺', '台') : '';
 
