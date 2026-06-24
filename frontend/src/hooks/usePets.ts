@@ -55,9 +55,7 @@ export const usePets = (initialParams: any = {}) => {
     return res.data;
   };
 
-  useEffect(() => {
-    fetchPets();
-  }, []);
+  // NOTE：不在此處自動 fetch，由呼叫端（AdminDashboard）控制觸發時機，避免雙重請求閃爍
 
   return {
     petsList,

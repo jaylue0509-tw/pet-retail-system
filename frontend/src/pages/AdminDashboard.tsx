@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useDashboardStats } from '../hooks/useDashboardStats';
 import { usePets } from '../hooks/usePets';
@@ -28,12 +28,21 @@ const AdminDashboard: React.FC = () => {
   const petsParams = userRole === 'store_manager' && userStoreId ? { store_id: userStoreId, publish_status_filter: 'all', status_filter: 'all' } : { publish_status_filter: 'all', status_filter: 'all' };
   const { petsList, pagination, fetchPets, updatePet } = usePets(petsParams);
 
+  // NOTE：用 useCallback 穩定函式引用，避免 useEffect 因函式重新創建而無限觸發
+  const stableFetchPets = useCallback(() => {
+    fetchPets();
+  }, [userRole, userStoreId]);
+
+  const stableRefetchStats = useCallback(() => {
+    refetchStats();
+  }, []);
+
   useEffect(() => {
     if (isLoggedIn) {
-      refetchStats();
-      fetchPets();
+      stableRefetchStats();
+      stableFetchPets();
     }
-  }, [isLoggedIn, userRole, userStoreId]);
+  }, [isLoggedIn, stableFetchPets, stableRefetchStats]);
 
   const handleLogin = async () => {
     try {
