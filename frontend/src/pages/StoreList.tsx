@@ -58,9 +58,6 @@ const StoreList: React.FC = () => {
     const activePets = store.pets ? store.pets.filter((p: any) => p.publish_status === '上架中') : [];
     const validDogsCount = activePets.filter((p: any) => p.category === '犬').length;
     const validCatsCount = activePets.filter((p: any) => p.category === '貓').length;
-    
-    // Hide store if it has 0 active pets
-    if (validDogsCount + validCatsCount === 0) return false;
 
     if (filterPets === 'dog' && validDogsCount === 0) return false;
     if (filterPets === 'cat' && validCatsCount === 0) return false;
