@@ -8,7 +8,11 @@ from model import models
 from api.routers import auth, stores, pets, dashboard, users
 
 # 確保靜態檔案上傳目錄存在
-os.makedirs("static/uploads", exist_ok=True)
+try:
+    os.makedirs("static/uploads", exist_ok=True)
+except OSError:
+    # 支援 Vercel 等 Serverless 唯讀環境下的啟動
+    pass
 
 # 建立資料庫表格
 models.Base.metadata.create_all(bind=engine)
