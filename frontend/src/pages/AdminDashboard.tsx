@@ -15,7 +15,7 @@ import UserManagementPanel from '../components/UserManagementPanel';
 const AdminDashboard: React.FC = () => {
   const { isLoggedIn, username, userRole, userStoreId, login, logout } = useAuth();
   const { stats, loading: statsLoading, refetch: refetchStats } = useDashboardStats();
-  const { stores } = useStores();
+  const { stores } = useStores({ page: 1, size: 200 });
   
   const [activeTab, setActiveTab] = useState('overview');
   const [isModalOpen, setIsModalOpen] = useState(false);

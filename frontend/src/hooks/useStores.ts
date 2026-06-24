@@ -24,13 +24,13 @@ export interface Store {
   pets: PetBrief[];
 }
 
-export const useStores = () => {
+export const useStores = (initialParams: any = { page: 1, size: 12 }) => {
   const [stores, setStores] = useState<Store[]>([]);
   const [pagination, setPagination] = useState({ total_count: 0, total_pages: 0, current_page: 1 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchStores = async (params: any = { page: 1, size: 12 }) => {
+  const fetchStores = async (params: any = initialParams) => {
     setLoading(true);
     try {
       const res = await api.get('/stores', { params });
@@ -74,7 +74,7 @@ export const useStores = () => {
   };
 
   useEffect(() => {
-    fetchStores();
+    fetchStores(initialParams);
   }, []);
 
   return {
