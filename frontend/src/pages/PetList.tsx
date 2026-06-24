@@ -101,6 +101,8 @@ const PetList: React.FC = () => {
           min_days,
           max_days,
           sort_by: sortBy,
+          publish_status_filter: '上架中',
+          status_filter: '在庫'
         };
 
         const res = await api.get('/pets', { params });
