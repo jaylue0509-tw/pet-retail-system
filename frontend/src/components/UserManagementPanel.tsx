@@ -28,7 +28,7 @@ const UserManagementPanel: React.FC<UserManagementPanelProps> = ({ stores }) => 
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const res = await api.get('/users/');
+      const res = await api.get('/users');
       setUsers(res.data);
     } catch (err) {
       setError('無法載入使用者列表');
@@ -87,7 +87,7 @@ const UserManagementPanel: React.FC<UserManagementPanelProps> = ({ stores }) => 
         if (!formData.username || !formData.password) return alert('帳號與密碼為必填');
         payload.username = formData.username;
         payload.password = formData.password;
-        await api.post('/users/', payload);
+        await api.post('/users', payload);
       }
       setIsModalOpen(false);
       fetchUsers();
