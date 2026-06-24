@@ -100,15 +100,15 @@ class StoreBase(BaseModel):
     name: str
     address: str
     phone: str
-    business_hours: str
+    business_hours: Optional[str] = None
     grooming_hours: Optional[str] = None
     map_url: Optional[str] = None
     license_number: Optional[str] = None
-    can_trade_dog: bool = False
-    can_trade_cat: bool = False
-    can_board_dog: bool = False
-    can_board_cat: bool = False
-    can_board_small_animal: bool = False
+    can_trade_dog: Optional[bool] = False
+    can_trade_cat: Optional[bool] = False
+    can_board_dog: Optional[bool] = False
+    can_board_cat: Optional[bool] = False
+    can_board_small_animal: Optional[bool] = False
 
 class StoreCreate(StoreBase):
     pass
