@@ -69,7 +69,14 @@ def get_filtered_pets(
 
 def update_pet_info(db: Session, db_pet: models.Pet, pet_update: schemas.PetUpdate, current_user: models.User):
     old_status = db_pet.publish_status
-    operator_name = current_user.full_name if current_user.full_name else current_user.username
+    base_name = current_user.full_name if current_user.full_name else current_user.username
+    if current_user.role == 'admin':
+        operator_name = f"{base_name} (總部)"
+    elif current_user.store:
+        operator_name = f"{base_name} ({current_user.store.name})"
+    else:
+        operator_name = base_name
+
     if pet_update.publish_status is not None and pet_update.publish_status != old_status:
         new_status = pet_update.publish_status
         operator = pet_update.operator or operator_name

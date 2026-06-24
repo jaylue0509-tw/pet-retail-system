@@ -140,7 +140,7 @@ const PetManagementTable: React.FC<PetManagementTableProps> = ({ pets, stores, u
                     </span>
                   </td>
                   <td style={{ padding: '14px 16px', fontSize: '0.9rem', color: 'var(--ink-mid)' }}>
-                    {pet.updated_by || '-'}
+                    {pet.updated_by || '系統管理維護'}
                   </td>
                   <td style={{ padding: '14px 16px' }}>
                     <button 

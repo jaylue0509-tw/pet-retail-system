@@ -335,7 +335,7 @@ const PetEditModal: React.FC<PetEditModalProps> = ({ pet, username, onClose, onS
                   {statusLogs.map(log => (
                     <tr key={log.id} style={{ borderBottom: '1px solid var(--border)' }}>
                       <td style={{ padding: '10px', color: 'var(--ink-mid)' }}>{new Date(log.created_at).toLocaleString('zh-TW')}</td>
-                      <td style={{ padding: '10px', fontWeight: 600 }}>{log.operator}</td>
+                      <td style={{ padding: '10px', fontWeight: 600 }}>{log.operator || '系統管理維護'}</td>
                       <td style={{ padding: '10px' }}>
                         <span style={{ textDecoration: 'line-through', color: '#a0aec0', marginRight: '4px' }}>{log.old_status}</span> 
                         ➔ <strong style={{ color: 'var(--primary)' }}>{log.new_status}</strong>
