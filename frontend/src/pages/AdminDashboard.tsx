@@ -77,7 +77,7 @@ const AdminDashboard: React.FC = () => {
           <p style={{ textAlign: 'center', color: 'var(--ink-light)', fontSize: '0.9rem', marginBottom: '2rem' }}>請輸入您的同仁帳號密碼進行驗證</p>
           
           <div className="form-group">
-            <label className="form-label">管理帳號 (如 admin / manhattan)</label>
+            <label className="form-label">管理帳號</label>
             <input 
               type="text" 
               className="form-input" 
@@ -88,7 +88,7 @@ const AdminDashboard: React.FC = () => {
           </div>
           
           <div className="form-group">
-            <label className="form-label">密碼 (測試預設 admin123 或 store123)</label>
+            <label className="form-label">密碼</label>
             <input 
               type="password" 
               className="form-input" 
